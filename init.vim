@@ -522,8 +522,3 @@ end
 vim.keymap.set('n', '<leader>q', ToggleLspHoverSimple, { noremap=true, silent=true, desc="Toggle LSP Hover"})
 vim.keymap.set('n', 'K', ToggleLspHoverSimple, { noremap=true, silent=true, desc="Toggle LSP Hover"})
 EOF
-
-
-lua << EOF
-
-EOF
