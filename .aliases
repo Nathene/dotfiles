@@ -6,3 +6,9 @@ alias gs="git status"
 alias ga="git add"
 alias gc="git commit -m"
 alias gp="git push"
+
+alias doc="cd ~/Documents"
+alias dev="cd ~/Documents/dev"
+
+alias zshrc='nvim ~/.zshrc'
+alias sou='source ~/.zshrc'
