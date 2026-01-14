@@ -68,43 +68,48 @@ else
 fi
 
 # ==============================================================================
-#  3. SYMLINKING (The Magic Part)
+#  3. SYMLINKING (Aggressive Fresh Start)
 # ==============================================================================
 echo -e "${BLUE}Linking Config Files...${NC}"
 
-# Ensure Target Config Dirs Exist
-mkdir -p "$HOME/.config/nvim"
-mkdir -p "$HOME/.config/alacritty"
-
-# Helper function
 link_file() {
     local src="$1"
     local dest="$2"
-    
-    # Check if source file actually exists in dotfiles repo
+
+    # 1. Check if source exists in your repo
     if [ ! -e "$src" ]; then
         echo -e "${RED}ERROR: Source file not found: $src${NC}"
         return
     fi
 
-    # Backup existing file if it's not a symlink
-    if [ -e "$dest" ] && [ ! -L "$dest" ]; then
-        mv "$dest" "${dest}.backup"
-        echo "Backed up: $dest"
+    # 2. Get Absolute Path (CRITICAL to prevent infinite loops)
+    # This ensures the link points to /Users/... not a relative path
+    local abs_src
+    abs_src=$(cd "$(dirname "$src")" && pwd)/$(basename "$src")
+
+    # 3. Create destination directory if it doesn't exist
+    mkdir -p "$(dirname "$dest")"
+
+    # 4. Aggressive Fresh Start:
+    # If destination exists (file, directory, or broken link), REMOVE IT.
+    if [ -e "$dest" ] || [ -L "$dest" ]; then
+        rm -rf "$dest"
     fi
 
-    # Link it
-    ln -sfn "$src" "$dest"
-    echo "Linked: $dest -> $src"
+    # 5. Create the fresh link
+    ln -s "$abs_src" "$dest"
+    echo -e "${GREEN}Linked: $dest -> $abs_src${NC}"
 }
 
 # --- Link the files ---
-link_file "$DOTFILES_DIR/.zshrc"        "$HOME/.zshrc"
-link_file "$DOTFILES_DIR/.aliases"      "$HOME/.aliases"
-link_file "$DOTFILES_DIR/.tmux.conf"    "$HOME/.tmux.conf"
+# Using DOTFILES_DIR ensures we are pointing to your repo files
+link_file "$DOTFILES_DIR/.zshrc"         "$HOME/.zshrc"
+link_file "$DOTFILES_DIR/.aliases"       "$HOME/.aliases"
+link_file "$DOTFILES_DIR/.tmux.conf"     "$HOME/.tmux.conf"
 
-link_file "$DOTFILES_DIR/.config/nvim/init.lua"             "$HOME/.config/nvim/init.lua"
-link_file "$DOTFILES_DIR/.config/alacritty/alacritty.toml"  "$HOME/.config/alacritty/alacritty.toml"
-link_file "$DOTFILES_DIR/.config/starship.toml"             "$HOME/.config/starship.toml"
+# Config subdirectories
+link_file "$DOTFILES_DIR/.config/nvim/init.lua"          "$HOME/.config/nvim/init.lua"
+link_file "$DOTFILES_DIR/.config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+link_file "$DOTFILES_DIR/.config/starship.toml"           "$HOME/.config/starship.toml"
 
 echo -e "${GREEN}Setup Complete! Restart your terminal.${NC}"
