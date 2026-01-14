@@ -1,0 +1,73 @@
+add_newline = true
+command_timeout = 1000
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$golang\
+$rust\
+$python\
+$lua\
+$nodejs\
+$docker_context\
+$line_break\
+$character"""
+
+[aws]
+disabled = true
+
+[directory]
+style = "bold blue"
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+symbol = " "
+style = "purple"
+
+[git_status]
+style = "red"
+conflicted = "🏳"
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
+up_to_date = ""
+untracked = "🤷"
+stashed = "📦"
+modified = "📝"
+
+[golang]
+symbol = " "
+style = "cyan"
+format = ' [$symbol($version )]($style)'
+
+[rust]
+symbol = "🦀 "
+style = "red"
+format = ' [$symbol($version )]($style)'
+
+[python]
+symbol = "🐍 "
+style = "yellow"
+format = ' [$symbol$pyenv_prefix($version )($virtualenv )]($style)'
+
+[lua]
+symbol = "🌙 "
+style = "blue"
+format = ' [$symbol($version )]($style)'
+
+[nodejs]
+symbol = "🟢 "
+style = "green"
+format = ' [$symbol($version )]($style)'
+
+[docker_context]
+symbol = "🐳 "
+style = "blue"
+format = ' [$symbol$context]($style)'
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
+vimcmd_symbol = "[V](bold green)"
