@@ -82,3 +82,15 @@ vim.keymap.set("n", "<C-h>", "<C-w><C-h>")
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>")
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>")
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>")
+
+-- Close Neovim if NvimTree is the only window left
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("NvimTreeClose", { clear = true }),
+  callback = function()
+    -- Check if there is only 1 window open
+    local wins = vim.api.nvim_list_wins()
+    if #wins == 1 and vim.bo.filetype == "NvimTree" then
+      vim.cmd("quit")
+    end
+  end,
+})
