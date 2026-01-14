@@ -35,7 +35,7 @@ fi
 # Starship Prompt
 eval "$(starship init zsh)"
 
-function newalias() {
+function newa() {
     # 1. Check if we have enough arguments
     if [ -z "$1" ] || [ -z "$2" ]; then
         echo "Usage: newalias <name> <command>"
